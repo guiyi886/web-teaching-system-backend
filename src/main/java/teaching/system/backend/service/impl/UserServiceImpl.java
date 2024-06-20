@@ -14,6 +14,8 @@ import teaching.system.backend.mapper.UserMapper;
 import teaching.system.backend.service.UserService;
 import teaching.system.backend.util.HashUtil;
 
+import java.util.List;
+
 
 @Service
 @Data
@@ -98,6 +100,63 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return "用户注册失败";
         }
         return "注册成功";
+    }
+
+    @Override
+    public List<User> getStudents() {
+        List<User> students = lambdaQuery().eq(User::getRole, "学生").list();
+        return students;
+    }
+
+    @Override
+    public void resetPassword(String account) {
+        User user = lambdaQuery().eq(User::getAccount, account).one();
+        if (user == null) {
+            throw new RuntimeException("用户不存在");
+        }
+        user.setSaltHashedPassword(HashUtil.sha256(HashUtil.sha256("qwer1234") + user.getSalt()));
+        boolean isUpdated = updateById(user);
+        if (!isUpdated) {
+            throw new RuntimeException("密码重置失败！");
+        }
+    }
+
+    @Override
+    public void disableStudent(String account) {
+        User user = lambdaQuery().eq(User::getAccount, account).one();
+        if (user == null) {
+            throw new RuntimeException("用户不存在");
+        }
+        user.setStatus(0);
+        boolean isUpdated = updateById(user);
+        if (!isUpdated) {
+            throw new RuntimeException("账号禁用失败！");
+        }
+    }
+
+    @Override
+    public void enableStudent(String account) {
+        User user = lambdaQuery().eq(User::getAccount, account).one();
+        if (user == null) {
+            throw new RuntimeException("用户不存在");
+        }
+        user.setStatus(1);
+        boolean isUpdated = updateById(user);
+        if (!isUpdated) {
+            throw new RuntimeException("账号启用失败！");
+        }
+    }
+
+    @Override
+    public void deleteStudent(String account) {
+        User user = lambdaQuery().eq(User::getAccount, account).one();
+        if (user == null) {
+            throw new RuntimeException("用户不存在");
+        }
+        boolean isDeleted = removeById(user.getId());
+        if (!isDeleted) {
+            throw new RuntimeException("用户删除失败");
+        }
     }
 }
 
