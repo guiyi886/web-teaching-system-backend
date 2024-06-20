@@ -37,7 +37,13 @@ public class UserController {
     @PostMapping("register")
     public Result updateInfo(@RequestBody @Validated User user) {
         log.info("注册尝试:{}", user);
-        userServiceImpl.register(user);
-        return Result.success("注册成功!");
+        //userServiceImpl.register(user);
+        //return Result.success("注册成功!");
+        String msg = userServiceImpl.register(user);
+        if ("注册成功".equals(msg)) {
+            return Result.success("注册成功!");
+        } else {
+            return Result.error(msg);
+        }
     }
 }

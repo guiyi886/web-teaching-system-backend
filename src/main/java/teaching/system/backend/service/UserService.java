@@ -12,5 +12,5 @@ public interface UserService extends IService<User> {
 
     void updateInfo(UpdateInfoDTO updateInfoDTO);
 
-    void register(User user);
+    String register(User user);
 }

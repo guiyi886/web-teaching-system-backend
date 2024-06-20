@@ -77,10 +77,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public void register(User user) {
+    public String register(User user) {
         String account = user.getAccount();
         if (lambdaQuery().eq(User::getAccount, account).one() != null) {
-            throw new RuntimeException("用户已存在");
+            //throw new RuntimeException("用户已存在");
+            return "用户已存在";
         }
         user.setRole("学生");
         user.setStatus(1);
@@ -93,8 +94,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         boolean isInserted = save(user);
         if (!isInserted) {
-            throw new RuntimeException("用户注册失败");
+            //throw new RuntimeException("用户注册失败");
+            return "用户注册失败";
         }
+        return "注册成功";
     }
 }
 
