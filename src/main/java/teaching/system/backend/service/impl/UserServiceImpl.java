@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import teaching.system.backend.domain.dto.LoginDTO;
+import teaching.system.backend.domain.dto.UpdateInfoDTO;
 import teaching.system.backend.domain.po.User;
 import teaching.system.backend.domain.vo.LoginVO;
 import teaching.system.backend.mapper.UserMapper;
@@ -54,6 +55,25 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         loginVO.setStatus(user.getStatus());
 
         return loginVO;
+    }
+
+    @Override
+    public void updateInfo(UpdateInfoDTO updateInfoDTO) {
+        String account = updateInfoDTO.getAccount();
+        User user = lambdaQuery().eq(User::getAccount, account).one();
+        if (user == null) {
+            throw new RuntimeException("用户不存在");
+        }
+        log.info("接收到的邮箱{}", updateInfoDTO.getEmail());
+        log.info("接收到的电话{}", updateInfoDTO.getPhone());
+        user.setEmail(updateInfoDTO.getEmail());
+        user.setPhone(updateInfoDTO.getPhone());
+
+        // 保存更新后的用户信息到数据库
+        boolean isUpdated = updateById(user);
+        if (!isUpdated) {
+            throw new RuntimeException("用户信息更新失败");
+        }
     }
 }
 
