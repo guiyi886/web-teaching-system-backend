@@ -158,6 +158,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new RuntimeException("用户删除失败");
         }
     }
+
+    @Override
+    public void forget(User user) {
+        User userAll = lambdaQuery().eq(User::getAccount, user.getAccount()).one();
+        if (userAll == null) {
+            throw new RuntimeException("用户不存在");
+        }
+        if (userAll.getUsername().equals(user.getUsername()) && userAll.getIdentity().equals(user.getIdentity())) {
+            resetPassword(user.getAccount());
+        } else {
+            throw new RuntimeException("用户信息错误");
+        }
+    }
 }
 
 

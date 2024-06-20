@@ -73,4 +73,11 @@ public class UserController {
         userServiceImpl.deleteStudent(account);
         return Result.success(null, "删除账号成功！");
     }
+
+    @PutMapping("/forget")
+    public Result forget(@RequestBody User user) {
+        log.info("忘记密码尝试重置:{}", user);
+        userServiceImpl.forget(user);
+        return Result.success(null, "重置为qwer1234");
+    }
 }
