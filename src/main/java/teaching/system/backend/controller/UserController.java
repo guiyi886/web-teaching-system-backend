@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import teaching.system.backend.domain.dto.LoginDTO;
 import teaching.system.backend.domain.dto.UpdateInfoDTO;
+import teaching.system.backend.domain.po.User;
 import teaching.system.backend.result.Result;
 import teaching.system.backend.service.impl.UserServiceImpl;
 
@@ -31,5 +32,12 @@ public class UserController {
         log.info("修改尝试:{}", updateInfoDTO);
         userServiceImpl.updateInfo(updateInfoDTO);
         return Result.success("修改成功!");
+    }
+
+    @PostMapping("register")
+    public Result updateInfo(@RequestBody @Validated User user) {
+        log.info("注册尝试:{}", user);
+        userServiceImpl.register(user);
+        return Result.success("注册成功!");
     }
 }

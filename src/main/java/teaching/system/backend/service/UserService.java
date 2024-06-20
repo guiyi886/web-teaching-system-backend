@@ -11,4 +11,6 @@ public interface UserService extends IService<User> {
     Object login(LoginDTO loginDTO);
 
     void updateInfo(UpdateInfoDTO updateInfoDTO);
+
+    void register(User user);
 }

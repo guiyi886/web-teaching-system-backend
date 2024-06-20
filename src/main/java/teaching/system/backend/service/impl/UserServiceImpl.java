@@ -75,6 +75,27 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new RuntimeException("用户信息更新失败");
         }
     }
+
+    @Override
+    public void register(User user) {
+        String account = user.getAccount();
+        if (lambdaQuery().eq(User::getAccount, account).one() != null) {
+            throw new RuntimeException("用户已存在");
+        }
+        user.setRole("学生");
+        user.setStatus(1);
+
+        // 生成1到1000之间的随机整数
+        int randomNumber = (int) (Math.random() * 1000) + 1;
+        String salt = "random_salt_" + randomNumber;
+        user.setSalt(salt);
+        user.setSaltHashedPassword(HashUtil.sha256(user.getHashedPassword() + salt));
+
+        boolean isInserted = save(user);
+        if (!isInserted) {
+            throw new RuntimeException("用户注册失败");
+        }
+    }
 }
 
 
