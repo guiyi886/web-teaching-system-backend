@@ -20,8 +20,11 @@ public class UserController {
     @PostMapping("login")
     public Result login(@RequestBody @Validated LoginDTO loginDTO) {
         log.info("登录尝试:{}", loginDTO);
-
-        return Result.success(userServiceImpl.login(loginDTO), "登录成功!");
+        try {
+            return Result.success(userServiceImpl.login(loginDTO), "登录成功!");
+        } catch (Exception e) {
+            return Result.error("账号和或密码错误!");
+        }
     }
 
     @PostMapping("updateInfo")
