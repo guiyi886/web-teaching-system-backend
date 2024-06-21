@@ -24,6 +24,7 @@ import java.util.List;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final UserMapper userMapper;
 
     @Override
     public Object login(LoginDTO loginDTO) {
@@ -170,6 +171,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         } else {
             throw new RuntimeException("用户信息错误");
         }
+    }
+
+    @Override
+    public void changeRegisterAllow(Integer allow) {
+        userMapper.changeRegisterAllow(allow);
+    }
+
+    @Override
+    public Integer getRegisterAllow() {
+        return userMapper.getRegisterAllow();
     }
 }
 

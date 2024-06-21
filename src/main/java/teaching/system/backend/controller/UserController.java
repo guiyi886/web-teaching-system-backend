@@ -80,4 +80,15 @@ public class UserController {
         userServiceImpl.forget(user);
         return Result.success(null, "重置为qwer1234");
     }
+
+    @PutMapping("/changeRegisterAllow/{allow}")
+    public Result changeRegisterAllow(@PathVariable Integer allow) {
+        userServiceImpl.changeRegisterAllow(allow);
+        return Result.success(null, "更改注册权限成功！");
+    }
+
+    @GetMapping("/getRegisterAllow")
+    public Result getRegisterAllow() {
+        return Result.success(userServiceImpl.getRegisterAllow(), "查询注册权限成功！");
+    }
 }

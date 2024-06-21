@@ -27,4 +27,8 @@ public interface UserService extends IService<User> {
     void deleteStudent(String account);
 
     void forget(User user);
+
+    void changeRegisterAllow(Integer allow);
+
+    Object getRegisterAllow();
 }
