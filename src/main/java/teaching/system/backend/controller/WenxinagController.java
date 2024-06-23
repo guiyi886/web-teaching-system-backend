@@ -25,11 +25,12 @@ public class WenxinagController {
     @Resource
     private WenxiangService wenxiangService;
 
-    @GetMapping("getPendingExperiments'")
-    public Result getPendingExperiments() {
+    @GetMapping("getPendingExperiments")
+    public Result getPendingExperiments(@RequestParam String account) {
         log.info("获取未完成实验..");
         QueryWrapper<Wenxiang> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("status", 0);
+        queryWrapper.eq("studentAccount", account);
         List<Wenxiang> list = wenxiangService.list();
         return Result.success(list);
     }
