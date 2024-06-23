@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @RestController
 @Slf4j
 @RequestMapping("/notice")
-@CrossOrigin(origins = "http://127.0.0.1:5500")
+@CrossOrigin(origins = "*")
 public class UserNoticeController {
     @Resource
     private UserNoticeService userNoticeService;

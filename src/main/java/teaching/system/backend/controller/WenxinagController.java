@@ -3,7 +3,6 @@ package teaching.system.backend.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-
 import teaching.system.backend.domain.po.Wenxiang;
 import teaching.system.backend.result.Result;
 import teaching.system.backend.service.WenxiangService;
@@ -21,42 +20,48 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequestMapping("/api/")
+@CrossOrigin(origins = "*")
 public class WenxinagController {
     @Resource
     private WenxiangService wenxiangService;
+
     @GetMapping("getPendingExperiments'")
-    public Result getPendingExperiments(){
+    public Result getPendingExperiments() {
         log.info("获取未完成实验..");
         QueryWrapper<Wenxiang> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("status",0);
+        queryWrapper.eq("status", 0);
         List<Wenxiang> list = wenxiangService.list();
         return Result.success(list);
     }
+
     @GetMapping("getSubmittedExperiments")
-    public Result getSubmittedExperiments(@RequestParam String account){
+    public Result getSubmittedExperiments(@RequestParam String account) {
         log.info("获取完成的实验列表");
         QueryWrapper<Wenxiang> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("status",1);
+        queryWrapper.eq("status", 1);
         List<Wenxiang> list = wenxiangService.list();
         return Result.success(list);
     }
+
     @GetMapping("getAllExperiments")
-    public Result getAllExperiments(){
+    public Result getAllExperiments() {
         log.info("获取未完成的实验列表");
         QueryWrapper<Wenxiang> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("status",1);
+        queryWrapper.eq("status", 1);
         List<Wenxiang> list = wenxiangService.list();
         return Result.success(list);
     }
+
     @PostMapping("submitExperiment")
-    public Result submitExperiment(){
+    public Result submitExperiment() {
         log.info("提交实验列表");
         QueryWrapper<Wenxiang> queryWrapper = new QueryWrapper<>();
         List<Wenxiang> list = wenxiangService.list();
         return Result.success(list);
     }
+
     @PostMapping("publishExperiment")
-    public Result publishExperiment(){
+    public Result publishExperiment() {
         log.info("发布实验");
         QueryWrapper<Wenxiang> queryWrapper = new QueryWrapper<>();
         List<Wenxiang> list = wenxiangService.list();
