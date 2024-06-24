@@ -84,12 +84,20 @@ public class WenxinagController {
         QueryWrapper<Wenxiang> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("role", "学生");
         List<User> userList = userService.list(queryWrapper);
+        String testPaper = jiChaoTestDTO.getTestPaper();
+        String testName = jiChaoTestDTO.getTestName();
         userList.forEach(user -> {
             Wenxiang wenxiang = new Wenxiang();
-            BeanUtil.copyProperties(user, wenxiang);
+            wenxiang.setId((long) user.getId());
+            wenxiang.setUsername(user.getUsername());
+            wenxiang.setExperimentContent(testPaper);
+            wenxiang.setExperimentTitle(testName);
             wenxiangService.save(wenxiang);
             UserNotice userNotice = new UserNotice();
-            BeanUtil.copyProperties(userNotice, user);
+            userNotice.setId((long) user.getId());
+            userNotice.setStudent(user.getUsername());
+            userNotice.setTitle("题目更新");
+            userNotice.setDescription("有试卷更新..");
             userNotice.setStatus(1);
             userNoticeService.save(userNotice);
         });
