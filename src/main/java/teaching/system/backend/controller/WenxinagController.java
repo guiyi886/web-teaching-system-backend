@@ -1,9 +1,11 @@
 package teaching.system.backend.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import teaching.system.backend.domain.dto.JiChaoTestDTO;
+import teaching.system.backend.domain.dto.WenxiangDTO;
 import teaching.system.backend.domain.po.User;
 import teaching.system.backend.domain.po.UserNotice;
 import teaching.system.backend.domain.po.Wenxiang;
@@ -63,11 +65,12 @@ public class WenxinagController {
     }
 
     @PostMapping("submitExperiment")
-    public Result submitExperiment() {
+    public Result submitExperiment(@RequestBody WenxiangDTO wenxiangDTO) {
         log.info("提交实验列表");
-        QueryWrapper<Wenxiang> queryWrapper = new QueryWrapper<>();
-        List<Wenxiang> list = wenxiangService.list();
-        return Result.success(list);
+        Wenxiang wenxiang = new Wenxiang();
+        BeanUtil.copyProperties(wenxiangDTO, wenxiang);
+        wenxiangService.save(wenxiang);
+        return Result.success("OK");
     }
 
     @PostMapping("publishExperiment")
