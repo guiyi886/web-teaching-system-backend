@@ -65,7 +65,7 @@ public class UserTestController {
         }
         QueryWrapper<UserTest> queryWrapper = new QueryWrapper<UserTest>();
         queryWrapper.eq("testName", testUpdateDTO.getTestName());
-        queryWrapper.eq("student", testUpdateDTO.getUsername());
+        //queryWrapper.eq("student", testUpdateDTO.getUsername());
         UserTest one = userTestService.getOne(queryWrapper);
         one.setStatus(0);
         userTestService.update(one, queryWrapper);
