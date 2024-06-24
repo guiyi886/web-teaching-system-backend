@@ -35,11 +35,12 @@ public class WenxinagController {
     @Resource
     private UserNoticeService userNoticeService;
 
-    @GetMapping("getPendingExperiments'")
-    public Result getPendingExperiments() {
+    @GetMapping("getPendingExperiments")
+    public Result getPendingExperiments(@RequestParam String account) {
         log.info("获取未完成实验..");
         QueryWrapper<Wenxiang> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("status", 0);
+        queryWrapper.eq("studentAccount", account);
         List<Wenxiang> list = wenxiangService.list();
         return Result.success(list);
     }
@@ -84,20 +85,12 @@ public class WenxinagController {
         QueryWrapper<Wenxiang> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("role", "学生");
         List<User> userList = userService.list(queryWrapper);
-        String testPaper = jiChaoTestDTO.getTestPaper();
-        String testName = jiChaoTestDTO.getTestName();
         userList.forEach(user -> {
             Wenxiang wenxiang = new Wenxiang();
-            wenxiang.setId((long) user.getId());
-            wenxiang.setUsername(user.getUsername());
-            wenxiang.setExperimentContent(testPaper);
-            wenxiang.setExperimentTitle(testName);
+            BeanUtil.copyProperties(user, wenxiang);
             wenxiangService.save(wenxiang);
             UserNotice userNotice = new UserNotice();
-            userNotice.setId((long) user.getId());
-            userNotice.setStudent(user.getUsername());
-            userNotice.setTitle("题目更新");
-            userNotice.setDescription("有试卷更新..");
+            BeanUtil.copyProperties(userNotice, user);
             userNotice.setStatus(1);
             userNoticeService.save(userNotice);
         });
