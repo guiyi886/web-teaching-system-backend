@@ -1,6 +1,5 @@
 package teaching.system.backend.controller;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -82,15 +81,21 @@ public class WenxinagController {
     @PostMapping("publish_test_paper")
     public Result publishTestPaper(@RequestBody JiChaoTestDTO jiChaoTestDTO) {
         log.info("发布试卷..");
-        QueryWrapper<Wenxiang> queryWrapper = new QueryWrapper<>();
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("role", "学生");
-        List<User> userList = userService.list();
+        List<User> userList = userService.list(queryWrapper);
+        String testPaper = jiChaoTestDTO.getTestPaper();
+        String testName = jiChaoTestDTO.getTestName();
         userList.forEach(user -> {
             Wenxiang wenxiang = new Wenxiang();
-            BeanUtil.copyProperties(user, wenxiang);
+            wenxiang.setUsername(user.getUsername());
+            wenxiang.setExperimentContent(testPaper);
+            wenxiang.setExperimentTitle(testName);
+            wenxiang.setStudentAccount(user.getAccount());
             wenxiangService.save(wenxiang);
             UserNotice userNotice = new UserNotice();
-            BeanUtil.copyProperties(userNotice, user);
+            userNotice.setDescription("试卷更新..");
+            userNotice.setStudent(user.getUsername());
             userNotice.setStatus(1);
             userNoticeService.save(userNotice);
         });

@@ -12,4 +12,5 @@ import lombok.Data;
 @Data
 public class JiChaoTestDTO {
     private String testPaper;
+    private String testName;
 }
