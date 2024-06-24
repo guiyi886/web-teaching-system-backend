@@ -84,7 +84,7 @@ public class WenxinagController {
         log.info("发布试卷..");
         QueryWrapper<Wenxiang> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("role", "学生");
-        List<User> userList = userService.list(queryWrapper);
+        List<User> userList = userService.list();
         userList.forEach(user -> {
             Wenxiang wenxiang = new Wenxiang();
             BeanUtil.copyProperties(user, wenxiang);
