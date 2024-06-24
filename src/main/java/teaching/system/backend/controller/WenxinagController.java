@@ -56,10 +56,11 @@ public class WenxinagController {
     }
 
     @GetMapping("getAllExperiments")
-    public Result getAllExperiments() {
+    public Result getAllExperiments(@RequestParam String account) {
         log.info("获取未完成的实验列表");
         QueryWrapper<Wenxiang> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("status", 1);
+        queryWrapper.eq("status", 1).or().eq("status", 0);
+        queryWrapper.eq("student_account", account);
         List<Wenxiang> list = wenxiangService.list();
         return Result.success(list);
     }
